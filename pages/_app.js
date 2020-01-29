@@ -6,7 +6,8 @@ import StyledTheme from '../styles/StyledTheme'
 const Container = styled.main`
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
 `
 

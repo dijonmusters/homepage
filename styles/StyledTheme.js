@@ -7,6 +7,7 @@ const theme = {
   fontColor: 'white',
   baseFontSize: '16px',
   backgroundColor: '#FFB6C1',
+  fontColorDark: '#555',
 }
 
 const StyledTheme = ({ children }) => {
