@@ -6,7 +6,7 @@ const theme = {
   baseFontWeight: 300,
   fontColor: 'white',
   baseFontSize: '16px',
-  backgroundColor: '#FFB6C1',
+  backgroundColor: 'rgb(42, 42, 46)',
   fontColorDark: '#555',
 }
 

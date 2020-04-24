@@ -17,36 +17,35 @@ const Percentage = styled.h1`
   font-weight: 300;
 `
 
-const getPercentage = () => {
-  const startTime = 8
-  const endTime = 16
+const getPercentage = (startTime, endTime) => {
   const totalSeconds = (endTime - startTime) * 60 * 60
   const now = new Date()
   const startOfDay = setHours(
     setMinutes(setSeconds(new Date(), 0), 0),
     startTime
   )
-  const endOfDay = setHours(setMinutes(setSeconds(new Date(), 0), 0), endTime)
   const timeElapsed = differenceInSeconds(now, startOfDay)
   return Math.floor((timeElapsed / totalSeconds) * 100)
 }
 
-const subscribeToPercentage = setPercentage => () => {
+const subscribeToPercentage = (setPercentage, startTime, endTime) => () => {
   const interval = setInterval(() => {
-    setPercentage(getPercentage())
+    setPercentage(getPercentage(startTime, endTime))
   }, 1000)
   return () => {
     clearInterval(interval)
   }
 }
 
-const PercentageOfDay = () => {
-  const [percentage, setPercentage] = useState(getPercentage())
-  useEffect(subscribeToPercentage(setPercentage))
+const PercentageOfDay = ({ startTime, endTime }) => {
+  const [percentage, setPercentage] = useState(
+    getPercentage(startTime, endTime)
+  )
+  useEffect(subscribeToPercentage(setPercentage, startTime, endTime))
   return (
     <>
       <Head>
-        <title>Day: {percentage}%</title>
+        <title>{percentage}%</title>
       </Head>
       <Percentage>{percentage}%</Percentage>
     </>

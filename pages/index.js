@@ -1,23 +1,28 @@
 import PercentageOfDay from '../components/PercentageOfDay'
-import Todos from '../components/Todos'
-import Options from '../components/Options'
+import TimeOfDay from '../components/TimeOfDay'
+import TodosContainer from '../components/TodosContainer'
+import TodoistLogin from '../components/TodoistLogin'
+import { isWorkHours } from '../utils/chrono'
 
-const Home = () => {
-  return (
-    <>
-      <Options />
-      <PercentageOfDay />
-      <Todos />
-    </>
-  )
-}
+const isAuthenticated = () =>
+  typeof window !== 'undefined' && !!localStorage.getItem('token')
+
+const Home = () => (
+  <>
+    {isWorkHours() ? (
+      <PercentageOfDay startTime={startTime} endTime={endTime} />
+    ) : (
+      <TimeOfDay />
+    )}
+    {isAuthenticated() ? <TodosContainer /> : <TodoistLogin />}
+  </>
+)
 
 export default Home
 
-// Only display percentage during work hours
-// Show motivational quote when not working - Enjoy having time off
-// Add Todo cards
-// Only show work todos during work hours
-// optional due dates
-// Get points
+// rewrite todo fetching logic
+// rewrite login and token logic - attach to axios instance
+// show 'mark as complete' instead of time since on hover
+// show countdown on todo's undo until it is actually complete
+// Show smart statement about being done with todos when empt
 // Confettee

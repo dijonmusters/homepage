@@ -1,0 +1,12 @@
+{
+  "env": {
+    "CLIENT_ID": "@homepage-todoist-client-id",
+    "CLIENT_SECRET": "@homepage-todoist-client-secret"
+  },
+  "build": {
+    "env": {
+      "CLIENT_ID": "@homepage-todoist-client-id",
+      "CLIENT_SECRET": "@homepage-todoist-client-secret"
+    }
+  }
+}

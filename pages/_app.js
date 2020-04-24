@@ -9,18 +9,22 @@ const Container = styled.main`
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
+  max-width: 768px;
+  margin: 0 auto;
 `
 
-const App = ({ Component, pageProps }) => (
-  <StyledTheme>
-    <>
-      <Normalize />
-      <GlobalStyles />
-      <Container>
-        <Component {...pageProps} />
-      </Container>
-    </>
-  </StyledTheme>
-)
+const App = ({ Component, pageProps }) => {
+  return (
+    <StyledTheme>
+      <>
+        <Normalize />
+        <GlobalStyles />
+        <Container>
+          <Component {...pageProps} />
+        </Container>
+      </>
+    </StyledTheme>
+  )
+}
 
 export default App
