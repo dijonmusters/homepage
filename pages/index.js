@@ -1,25 +1,17 @@
-import PercentageOfDay from '../components/PercentageOfDay'
-import TimeOfDay from '../components/TimeOfDay'
 import TodosContainer from '../components/TodosContainer'
-import TodoistLogin from '../components/TodoistLogin'
-import { isWorkHours } from '../utils/chrono'
-
-const isAuthenticated = () =>
-  typeof window !== 'undefined' && !!localStorage.getItem('token')
+import TimeContainer from '../components/TimeContainer'
 
 const Home = () => (
   <>
-    {isWorkHours() ? (
-      <PercentageOfDay startTime={startTime} endTime={endTime} />
-    ) : (
-      <TimeOfDay />
-    )}
-    {isAuthenticated() ? <TodosContainer /> : <TodoistLogin />}
+    <TimeContainer />
+    <TodosContainer />
   </>
 )
 
 export default Home
 
+// todo: move start, end and any other time based stuff to hook
+// todo: dynamic title
 // rewrite todo fetching logic
 // rewrite login and token logic - attach to axios instance
 // show 'mark as complete' instead of time since on hover

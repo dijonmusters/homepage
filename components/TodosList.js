@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { faCheck } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import axios from 'axios'
 import { formatDistanceToNow } from 'date-fns'
+import { useTodos } from '../context/Todos'
+import Filters from './Filters'
 
 const Card = styled.div`
   text-align: left;
@@ -29,72 +28,23 @@ const Title = styled.span`
   text-decoration: ${props => (props.isUndoable ? 'line-through' : 'none')};
 `
 
-const FilterContainer = styled.div`
-  margin: 1rem 0;
-  display: flex;
-  justify-content: center;
-`
-
-const Filter = styled.span`
-  padding: 0 2rem;
-  text-decoration: ${props => props.isSelected && 'underline'};
-  border-right: 1px solid white;
-
-  &:last-child {
-    border-right: none;
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-`
-
 const StyledDate = styled.span`
   margin-left: 1rem;
   flex-shrink: 0;
 `
 
-const Filters = ({ filters, selected, setSelected }) => {
-  const changeFilter = newSelected => e => setSelected(newSelected)
-
-  return (
-    <FilterContainer>
-      <Filter isSelected={selected === 'All'} onClick={changeFilter('All')}>
-        All
-      </Filter>
-      {filters.map(f => (
-        <Filter key={f} isSelected={selected === f} onClick={changeFilter(f)}>
-          {f}
-        </Filter>
-      ))}
-    </FilterContainer>
-  )
-}
-
-const completeTodo = async id => {
-  const url = `https://api.todoist.com/rest/v1/tasks/${id}/close`
-  const token = localStorage.getItem('token')
-  const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-
-  const { data } = await axios.post(url, {}, options)
-}
-
-const Todos = ({ todos, refetch }) => {
-  const filters = [...new Set(todos.map(t => t.category))]
+const Todos = () => {
   const [selected, setSelected] = useState('All')
   const [undoableActions, setUndoableActions] = useState([])
+  const { loading, categories: filters, getTodosFor, completeTodo } = useTodos() // finish this
 
-  const filteredTodos =
-    selected !== 'All' ? todos.filter(t => t.category === selected) : todos
+  if (loading) return <p>Loading todos...</p>
+
+  const todos = getTodosFor(selected)
 
   const flagForCompletion = id => async e => {
     const timeout = setTimeout(async () => {
       await completeTodo(id)
-      await refetch()
       const removedUndoableActions = undoableActions.filter(a => a.id !== id)
       setUndoableActions(removedUndoableActions)
     }, 3000)
@@ -133,7 +83,7 @@ const Todos = ({ todos, refetch }) => {
         selected={selected}
         setSelected={setSelected}
       />
-      {filteredTodos.map(renderTodo)}
+      {todos.map(renderTodo)}
     </>
   )
 }

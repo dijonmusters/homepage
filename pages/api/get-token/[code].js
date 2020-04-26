@@ -13,7 +13,6 @@ const exchangeToken = code => {
 module.exports = async (req, res) => {
   const { code } = req.query
   try {
-    // res.send(code)
     const { data } = await exchangeToken(code)
     res.send(data)
   } catch (e) {

@@ -19,7 +19,8 @@ const getTime = () => {
 
 const subscribeToTime = setTime => () => {
   const interval = setInterval(() => {
-    setTime(getTime())
+    const time = getTime()
+    setTime(time)
   }, 1000)
   return () => {
     clearInterval(interval)
@@ -28,7 +29,9 @@ const subscribeToTime = setTime => () => {
 
 const TimeOfDay = () => {
   const [time, setTime] = useState(getTime())
+
   useEffect(subscribeToTime(setTime))
+
   return <Time>{time}</Time>
 }
 

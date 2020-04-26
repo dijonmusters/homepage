@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import { Normalize } from 'styled-normalize'
 import GlobalStyles from '../styles/globalStyles'
 import StyledTheme from '../styles/StyledTheme'
+import TitleProvider from '../context/Title'
+import TodosProvider from '../context/Todos'
 
 const Container = styled.main`
   min-height: 100vh;
@@ -16,13 +18,15 @@ const Container = styled.main`
 const App = ({ Component, pageProps }) => {
   return (
     <StyledTheme>
-      <>
-        <Normalize />
-        <GlobalStyles />
-        <Container>
-          <Component {...pageProps} />
-        </Container>
-      </>
+      <TodosProvider>
+        <TitleProvider>
+          <Normalize />
+          <GlobalStyles />
+          <Container>
+            <Component {...pageProps} />
+          </Container>
+        </TitleProvider>
+      </TodosProvider>
     </StyledTheme>
   )
 }

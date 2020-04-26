@@ -23,7 +23,7 @@ const Todoist = () => {
   return (
     <LoginPanel href={url} className="link">
       <img src="todoist-logo.png" alt="Todoist logo" />
-      <Login>Login with Todoist</Login>
+      <Login>Login</Login>
     </LoginPanel>
   )
 }
