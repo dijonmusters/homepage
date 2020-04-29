@@ -4,9 +4,9 @@ import { ThemeProvider } from 'styled-components'
 const theme = {
   fontFamily: 'sans-serif',
   baseFontWeight: 300,
-  fontColor: 'white',
+  fontColor: '#444',
   baseFontSize: '16px',
-  backgroundColor: 'rgb(42, 42, 46)',
+  backgroundColor: 'white',
   fontColorDark: '#555',
 }
 

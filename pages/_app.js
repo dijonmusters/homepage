@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Normalize } from 'styled-normalize'
 import GlobalStyles from '../styles/globalStyles'
 import StyledTheme from '../styles/StyledTheme'
-import TitleProvider from '../context/Title'
+import Title from '../components/Title'
 import TodosProvider from '../context/Todos'
 
 const Container = styled.main`
@@ -19,13 +19,12 @@ const App = ({ Component, pageProps }) => {
   return (
     <StyledTheme>
       <TodosProvider>
-        <TitleProvider>
-          <Normalize />
-          <GlobalStyles />
-          <Container>
-            <Component {...pageProps} />
-          </Container>
-        </TitleProvider>
+        <Normalize />
+        <GlobalStyles />
+        <Title />
+        <Container>
+          <Component {...pageProps} />
+        </Container>
       </TodosProvider>
     </StyledTheme>
   )

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import { formatDistanceToNow } from 'date-fns'
+import confetti from 'canvas-confetti'
 import { useTodos } from '../context/Todos'
 import Filters from './Filters'
 
@@ -33,6 +34,11 @@ const StyledDate = styled.span`
   flex-shrink: 0;
 `
 
+const EmptyList = styled.p`
+  text-align: center;
+  font-size: 1.5rem;
+`
+
 const Todos = () => {
   const [selected, setSelected] = useState('All')
   const [undoableActions, setUndoableActions] = useState([])
@@ -44,6 +50,7 @@ const Todos = () => {
 
   const flagForCompletion = id => async e => {
     const timeout = setTimeout(async () => {
+      confetti({ particleCount: 150 })
       await completeTodo(id)
       const removedUndoableActions = undoableActions.filter(a => a.id !== id)
       setUndoableActions(removedUndoableActions)
@@ -76,7 +83,7 @@ const Todos = () => {
     )
   }
 
-  return (
+  return todos.length > 0 ? (
     <>
       <Filters
         filters={filters}
@@ -85,6 +92,8 @@ const Todos = () => {
       />
       {todos.map(renderTodo)}
     </>
+  ) : (
+    <EmptyList>Wow, you're all done! What do you want to do next?</EmptyList>
   )
 }
 

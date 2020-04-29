@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react'
 import useRequest from '../hooks/useRequest'
+import useAuthentication from '../hooks/useAuthentication'
 
 const Context = createContext()
 
@@ -10,6 +11,7 @@ const TodosProvider = ({ children }) => {
   const [categories, setCategories] = useState()
   const [projects, setProjects] = useState()
 
+  const { isAuthenticated } = useAuthentication()
   const request = useRequest()
 
   const getFromTodoist = async type => {
@@ -41,8 +43,8 @@ const TodosProvider = ({ children }) => {
 
   const completeTodo = async id => {
     try {
-      await request.post(`/tasks/${id}/close`)
       setTodos(todos.filter(t => t.id !== id))
+      await request.post(`/tasks/${id}/close`)
     } catch (error) {
       console.log(`Failed to complete ${id}`)
     }
@@ -73,7 +75,7 @@ const TodosProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    getData()
+    isAuthenticated() && getData()
   }, [])
 
   const loading = !todos
