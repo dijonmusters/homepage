@@ -43,10 +43,25 @@ const TodosProvider = ({ children }) => {
 
   const completeTodo = async id => {
     try {
-      setTodos(todos.filter(t => t.id !== id))
+      const decoratedTodos = todos.map(t =>
+        t.id === id ? { ...t, isComplete: true } : t
+      )
+      setTodos(decoratedTodos)
       await request.post(`/tasks/${id}/close`)
     } catch (error) {
       console.log(`Failed to complete ${id}`)
+    }
+  }
+
+  const undoCompleteTodo = async id => {
+    try {
+      const decoratedTodos = todos.map(t =>
+        t.id === id ? { ...t, isComplete: false } : t
+      )
+      setTodos(decoratedTodos)
+      await request.post(`/tasks/${id}/reopen`)
+    } catch (error) {
+      console.log(`Failed to undo complete ${id}`)
     }
   }
 
@@ -86,6 +101,7 @@ const TodosProvider = ({ children }) => {
     categories,
     getTodosFor,
     completeTodo,
+    undoCompleteTodo,
     todos,
   }
 

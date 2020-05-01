@@ -4,97 +4,100 @@ import { formatDistanceToNow } from 'date-fns'
 import confetti from 'canvas-confetti'
 import { useTodos } from '../context/Todos'
 import Filters from './Filters'
+import { FiCircle, FiCheckCircle } from 'react-icons/fi'
 
-const Card = styled.div`
-  text-align: left;
-  padding: 1rem;
-  font-size: 1rem;
+const Container = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`
+
+const Todos = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  color: #444;
+`
+
+const Todo = styled.p`
+  margin: 0;
+  padding: 2rem 0;
+  border-top: solid 1px #efefef;
   display: flex;
   align-items: center;
-  border-left: 2px solid transparent;
-
-  &:hover {
-    border-left: 2px solid mintcream;
-    transform: scale(1.01);
-    cursor: pointer;
-  }
-
-  &:last-child {
-    border-bottom: none;
-  }
 `
 
-const Title = styled.span`
+const Left = styled.span`
   flex: 1;
-  text-decoration: ${props => (props.isUndoable ? 'line-through' : 'none')};
+  padding-left: 2rem;
 `
 
-const StyledDate = styled.span`
-  margin-left: 1rem;
-  flex-shrink: 0;
-`
-
-const EmptyList = styled.p`
-  text-align: center;
+const Icon = styled.span`
   font-size: 1.5rem;
+  padding: 1rem;
+  margin-right: 1rem;
+  > svg {
+    display: block;
+  }
 `
 
-const Todos = () => {
-  const [selected, setSelected] = useState('All')
-  const [undoableActions, setUndoableActions] = useState([])
-  const { loading, categories: filters, getTodosFor, completeTodo } = useTodos() // finish this
+const Text = styled.span`
+  display: block;
+  ${props => props.isComplete && 'text-decoration: line-through'};
+`
+
+const SubText = styled.span`
+  display: block;
+  color: #afafaf;
+  ${props => props.isComplete && 'text-decoration: line-through'};
+`
+
+const TodosList = () => {
+  const { loading, getTodosFor, completeTodo, undoCompleteTodo } = useTodos()
+  const [currentFilter, setCurrentFilter] = useState('All')
+
+  const handleCompleteToggle = (id, isComplete) => e => {
+    const options = {
+      particleCount: 200,
+      origin: { y: e.clientY / window.innerHeight },
+    }
+
+    !isComplete && confetti(options)
+    isComplete ? undoCompleteTodo(id) : completeTodo(id)
+  }
+
+  const renderTodo = ({ id, title, isComplete, created }) => (
+    <Todo key={id}>
+      <Left>
+        <Text isComplete={isComplete}>{title}</Text>
+        <SubText isComplete={isComplete}>
+          {formatDistanceToNow(new Date(created))} ago
+        </SubText>
+      </Left>
+      <Icon onClick={handleCompleteToggle(id, isComplete)}>
+        {isComplete ? (
+          <FiCheckCircle color="green" />
+        ) : (
+          <FiCircle color="#dfdfdf" />
+        )}
+      </Icon>
+    </Todo>
+  )
 
   if (loading) return <p>Loading todos...</p>
 
-  const todos = getTodosFor(selected)
+  const todos = getTodosFor(currentFilter)
 
-  const flagForCompletion = id => async e => {
-    const timeout = setTimeout(async () => {
-      confetti({ particleCount: 150 })
-      await completeTodo(id)
-      const removedUndoableActions = undoableActions.filter(a => a.id !== id)
-      setUndoableActions(removedUndoableActions)
-    }, 3000)
-
-    setUndoableActions([...undoableActions, { id, timeout }])
-  }
-
-  const undoAction = id => e => {
-    const action = undoableActions.find(a => a.id === id)
-    clearTimeout(action.timeout)
-    const removedUndoableActions = undoableActions.filter(a => a.id !== id)
-    setUndoableActions(removedUndoableActions)
-  }
-
-  const renderTodo = ({ id, title, created }) => {
-    const isUndoable = undoableActions.find(a => a.id === id)
-    const then = new Date(created)
-    return (
-      <Card key={title}>
-        <Title onClick={flagForCompletion(id)} isUndoable={isUndoable}>
-          {title}
-        </Title>
-        {isUndoable ? (
-          <span onClick={undoAction(id)}>Undo</span>
-        ) : (
-          <StyledDate>{formatDistanceToNow(then)} ago</StyledDate>
-        )}
-      </Card>
-    )
-  }
-
-  return todos.length > 0 ? (
-    <>
+  return (
+    <Container>
       <Filters
-        filters={filters}
-        selected={selected}
-        setSelected={setSelected}
+        currentFilter={currentFilter}
+        setCurrentFilter={setCurrentFilter}
       />
-      {todos.map(renderTodo)}
-    </>
-  ) : (
-    <EmptyList>Wow, you're all done! What do you want to do next?</EmptyList>
+      <Todos>{todos.map(renderTodo)}</Todos>
+    </Container>
   )
 }
 
-export default Todos
+export default TodosList
