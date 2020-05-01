@@ -5,7 +5,7 @@ import confetti from 'canvas-confetti'
 import { useTodos } from '../context/Todos'
 import Filters from './Filters'
 import { FiCircle, FiCheckCircle } from 'react-icons/fi'
-
+import NewTodo from './NewTodo'
 const Container = styled.div`
   flex: 1;
   display: flex;
@@ -96,6 +96,7 @@ const TodosList = () => {
         setCurrentFilter={setCurrentFilter}
       />
       <Todos>{todos.map(renderTodo)}</Todos>
+      <NewTodo />
     </Container>
   )
 }
