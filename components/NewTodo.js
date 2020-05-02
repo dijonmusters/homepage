@@ -1,6 +1,7 @@
 import Modal from 'react-modal'
 import { FiPlusCircle } from 'react-icons/fi'
 import styled from 'styled-components'
+import { useMediaQuery } from 'react-responsive'
 
 const UnstyledButton = styled.button`
   background: none;
@@ -12,13 +13,32 @@ const UnstyledButton = styled.button`
   outline: inherit;
 `
 
-const Button = styled(UnstyledButton)`
+const FloatingButton = styled(UnstyledButton)`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
   display: flex;
   align-items: center;
   color: #777;
+`
+
+const FixedButton = styled(UnstyledButton)`
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  padding: 2rem;
+  background: white;
+  box-shadow: 0 0 6px 2px #efefef;
+  z-index: 1;
+`
+
+const Sticky = styled.div`
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
 `
 
 const Icon = styled.span`
@@ -71,12 +91,16 @@ const Icon = styled.span`
 `
 
 const NewTodo = () => {
-  return (
-    <Button>
+  const isSmallScreen = useMediaQuery({ maxWidth: 800 })
+
+  return isSmallScreen ? (
+    <FixedButton>New task</FixedButton>
+  ) : (
+    <FloatingButton>
       <Icon>
         <FiPlusCircle size="3rem" strokeWidth="1" />
       </Icon>
-    </Button>
+    </FloatingButton>
   )
 }
 

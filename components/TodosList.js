@@ -7,11 +7,13 @@ import Filters from './Filters'
 import { FiCircle, FiCheckCircle } from 'react-icons/fi'
 import NewTodo from './NewTodo'
 import useGradient from '../hooks/useGradient'
+import { useMediaQuery } from 'react-responsive'
 
 const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  ${({ isSmallScreen }) => isSmallScreen && 'margin-bottom: 6rem'};
 `
 
 const Todos = styled.div`
@@ -65,6 +67,7 @@ const TodosList = () => {
   const { loading, getTodosFor, completeTodo, undoCompleteTodo } = useTodos()
   const [currentFilter, setCurrentFilter] = useState('All')
   const { middle } = useGradient()
+  const isSmallScreen = useMediaQuery({ maxWidth: 800 })
 
   const handleCompleteToggle = (id, isComplete) => e => {
     const options = {
@@ -106,7 +109,7 @@ const TodosList = () => {
   const todos = getTodosFor(currentFilter)
 
   return (
-    <Container>
+    <Container isSmallScreen={isSmallScreen}>
       <Filters
         currentFilter={currentFilter}
         setCurrentFilter={setCurrentFilter}
