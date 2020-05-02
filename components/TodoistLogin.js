@@ -9,10 +9,7 @@ const Container = styled.div`
 
 const LoginPanel = styled.a`
   background: rgba(0, 0, 0, 0.05);
-  /* width: fit-content; */
-  /* margin: 0 auto; */
   padding: 4rem 6rem;
-  /* border: 1px solid #afafaf; */
   display: flex;
   flex-direction: column;
   align-items: center;

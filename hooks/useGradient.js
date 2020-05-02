@@ -16,24 +16,36 @@ const useGradient = () => {
   const { percentageOfEntireDay } = useTime()
 
   const startOfDay = {
-    from: [143, 148, 251],
-    to: [78, 84, 200],
-  }
-
-  const endOfDay = {
     from: [215, 109, 119],
     to: [255, 175, 123],
   }
 
+  const middleOfDay = {
+    from: [144, 202, 249],
+    to: [181, 211, 231],
+  }
+
+  const endOfDay = {
+    from: [143, 148, 251],
+    to: [78, 84, 200],
+  }
+
+  const color1 = percentageOfEntireDay <= 50 ? startOfDay : middleOfDay
+  const color2 = percentageOfEntireDay <= 50 ? middleOfDay : endOfDay
+  const correctedPercentage =
+    percentageOfEntireDay <= 50
+      ? percentageOfEntireDay * 2
+      : (percentageOfEntireDay - 50) * 2
+
   const fromColor = getColorAtPercentage(
-    startOfDay.from,
-    endOfDay.from,
-    percentageOfEntireDay
+    color1.from,
+    color2.from,
+    correctedPercentage
   )
   const toColor = getColorAtPercentage(
-    startOfDay.to,
-    endOfDay.to,
-    percentageOfEntireDay
+    color1.to,
+    color2.to,
+    correctedPercentage
   )
 
   const middleColor = getColorAtPercentage(fromColor, toColor, 50)
