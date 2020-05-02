@@ -6,6 +6,8 @@ import { useTodos } from '../context/Todos'
 import Filters from './Filters'
 import { FiCircle, FiCheckCircle } from 'react-icons/fi'
 import NewTodo from './NewTodo'
+import useGradient from '../hooks/useGradient'
+
 const Container = styled.div`
   flex: 1;
   display: flex;
@@ -26,6 +28,12 @@ const Todo = styled.p`
   border-top: solid 1px #efefef;
   display: flex;
   align-items: center;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    cursor: pointer;
+    border-left: 3px solid ${({ color }) => `rgb(${color})`};
+  }
 `
 
 const Left = styled.span`
@@ -56,11 +64,15 @@ const SubText = styled.span`
 const TodosList = () => {
   const { loading, getTodosFor, completeTodo, undoCompleteTodo } = useTodos()
   const [currentFilter, setCurrentFilter] = useState('All')
+  const { middle } = useGradient()
 
   const handleCompleteToggle = (id, isComplete) => e => {
     const options = {
       particleCount: 200,
-      origin: { y: e.clientY / window.innerHeight },
+      origin: {
+        y: e.clientY / window.innerHeight,
+        x: e.clientX / window.innerHeight,
+      },
     }
 
     !isComplete && confetti(options)
@@ -68,14 +80,18 @@ const TodosList = () => {
   }
 
   const renderTodo = ({ id, title, isComplete, created }) => (
-    <Todo key={id}>
+    <Todo
+      key={id}
+      onClick={handleCompleteToggle(id, isComplete)}
+      color={middle}
+    >
       <Left>
         <Text isComplete={isComplete}>{title}</Text>
         <SubText isComplete={isComplete}>
           {formatDistanceToNow(new Date(created))} ago
         </SubText>
       </Left>
-      <Icon onClick={handleCompleteToggle(id, isComplete)}>
+      <Icon>
         {isComplete ? (
           <FiCheckCircle color="green" />
         ) : (

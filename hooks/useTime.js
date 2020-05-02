@@ -9,6 +9,20 @@ import {
 } from 'date-fns'
 import useLocalStorage from './useLocalStorage'
 
+const getPercentage = (startTime, endTime) => {
+  const totalSeconds = (endTime - startTime) * 60 * 60
+  const now = new Date()
+
+  const startOfDay = setHours(
+    setMinutes(setSeconds(new Date(), 0), 0),
+    startTime
+  )
+
+  const timeElapsed = differenceInSeconds(now, startOfDay)
+
+  return Math.floor((timeElapsed / totalSeconds) * 100)
+}
+
 const useTime = () => {
   const storage = useLocalStorage()
 
@@ -20,20 +34,6 @@ const useTime = () => {
     'Wednesday',
     'Thursday',
   ]
-
-  const getPercentage = () => {
-    const totalSeconds = (endTime - startTime) * 60 * 60
-    const now = new Date()
-
-    const startOfDay = setHours(
-      setMinutes(setSeconds(new Date(), 0), 0),
-      startTime
-    )
-
-    const timeElapsed = differenceInSeconds(now, startOfDay)
-
-    return Math.floor((timeElapsed / totalSeconds) * 100)
-  }
 
   const getTime = () => format(new Date(), 'HH:mm')
 
@@ -49,13 +49,18 @@ const useTime = () => {
     )
   }
 
-  const getDisplay = () => (isWorkHours() ? getPercentage() : getTime())
+  const getDisplay = () =>
+    isWorkHours() ? getPercentage(startTime, endTime) : getTime()
 
   const [display, setDisplay] = useState(getDisplay())
+  const [percentageOfEntireDay, setPercentageOfEntireDay] = useState(
+    getPercentage(0, 24)
+  )
 
   useEffect(() => {
     const interval = setInterval(() => {
       setDisplay(getDisplay())
+      setPercentageOfEntireDay(getPercentage(0, 24))
     }, 1000)
     return () => {
       clearInterval(interval)
@@ -67,6 +72,7 @@ const useTime = () => {
   return {
     showPercentage,
     display,
+    percentageOfEntireDay,
   }
 }
 
