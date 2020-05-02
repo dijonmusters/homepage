@@ -1,7 +1,8 @@
-import Modal from 'react-modal'
+import { useState, useEffect } from 'react'
 import { FiPlusCircle } from 'react-icons/fi'
 import styled from 'styled-components'
 import { useMediaQuery } from 'react-responsive'
+import Modal from './Modal'
 
 const UnstyledButton = styled.button`
   background: none;
@@ -31,14 +32,6 @@ const FixedButton = styled(UnstyledButton)`
   padding: 2rem;
   background: white;
   box-shadow: 0 0 6px 2px #efefef;
-  z-index: 1;
-`
-
-const Sticky = styled.div`
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
 `
 
 const Icon = styled.span`
@@ -90,17 +83,48 @@ const Icon = styled.span`
   }
 `
 
+const toggleModal = setIsModalOpen => () => {
+  setIsModalOpen(isModalOpen => !isModalOpen)
+}
+
+const closeModal = setIsModalOpen => () => {
+  setIsModalOpen(false)
+}
+
 const NewTodo = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const isSmallScreen = useMediaQuery({ maxWidth: 800 })
 
-  return isSmallScreen ? (
-    <FixedButton>New task</FixedButton>
-  ) : (
-    <FloatingButton>
+  const handleModalOpen = e => {
+    const isAlphaNumeric = e.key.match(/^[0-9A-Za-z]$/)
+    !isModalOpen && isAlphaNumeric && setIsModalOpen(true)
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleModalOpen)
+
+    return () => {
+      window.removeEventListener('keydown', handleModalOpen)
+    }
+  })
+
+  const renderFixed = () => (
+    <FixedButton onClick={toggleModal(setIsModalOpen)}>New task</FixedButton>
+  )
+
+  const renderFloating = () => (
+    <FloatingButton onClick={toggleModal(setIsModalOpen)}>
       <Icon>
         <FiPlusCircle size="3rem" strokeWidth="1" />
       </Icon>
     </FloatingButton>
+  )
+
+  return (
+    <>
+      {isSmallScreen ? renderFixed() : renderFloating()}
+      <Modal isOpen={isModalOpen} closeModal={closeModal(setIsModalOpen)} />
+    </>
   )
 }
 

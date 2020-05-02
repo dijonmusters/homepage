@@ -74,7 +74,7 @@ const TodosList = () => {
       particleCount: 200,
       origin: {
         y: e.clientY / window.innerHeight,
-        x: e.clientX / window.innerHeight,
+        x: e.clientX / window.innerWidth,
       },
     }
 

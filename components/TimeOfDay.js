@@ -6,9 +6,6 @@ const Header = styled.header`
   height: 200px;
   background: ${({ from, to }) =>
     `linear-gradient(to left, rgb(${from}), rgb(${to}))`};
-  /* background: ${props =>
-    `linear-gradient(to left, #8f94fb, #4e54c8)`}; sunset */
-  /* background: linear-gradient(to left, #d76d77, #ffaf7b); */ /* sunrise */
   color: white;
   display: flex;
   align-items: center;
