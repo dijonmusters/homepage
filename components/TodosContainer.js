@@ -12,9 +12,7 @@ const TodosContainer = () => {
   const { isAuthenticated } = useAuthentication()
 
   return (
-    <Container>
-      {isAuthenticated() ? <TodosList /> : <TodoistLogin />}
-    </Container>
+    <Container>{isAuthenticated ? <TodosList /> : <TodoistLogin />}</Container>
   )
 }
 

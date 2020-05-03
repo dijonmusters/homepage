@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import Centered from '../components/styled/Centered'
 
 const OAuthResponse = ({ code }) => {
   const router = useRouter()
@@ -15,7 +16,7 @@ const OAuthResponse = ({ code }) => {
     exchangeToken(code)
   }, [])
 
-  return <p>Exchanging token</p>
+  return <Centered>Exchanging token</Centered>
 }
 
 OAuthResponse.getInitialProps = ({ query: { code } }) => {

@@ -1,9 +1,13 @@
+import { useState, useEffect } from 'react'
 import useLocalStorage from './useLocalStorage'
 
 const useAuthentication = () => {
   const storage = useLocalStorage()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  const isAuthenticated = () => !!storage.get('token')
+  useEffect(() => {
+    setIsAuthenticated(!!storage.get('token'))
+  })
 
   return { isAuthenticated }
 }

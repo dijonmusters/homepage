@@ -11,4 +11,5 @@ const Home = () => {
 }
 export default Home
 
+// TODO: Add middle gradient for middle of day
 // websockets for todos added elsewhere

@@ -7,11 +7,16 @@ const Title = () => {
   const { display, showPercentage } = useTime()
 
   const getTitle = () => {
-    const titleBits = ['my-day']
+    const titleBits = []
     showPercentage && titleBits.push(`${display}%`)
-    todos && titleBits.push(`${todos.length} tasks left`)
 
-    return titleBits.join(' | ')
+    if (todos) {
+      const containsTodos = `${todos.length} tasks left`
+      const noTodos = 'All done for the day!'
+      titleBits.push(todos.length > 0 ? containsTodos : noTodos)
+    }
+
+    return titleBits.length > 0 ? titleBits.join(' | ') : 'Myday'
   }
 
   return (

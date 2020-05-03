@@ -90,8 +90,8 @@ const TodosProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    isAuthenticated() && getData()
-  }, [])
+    isAuthenticated && getData()
+  }, [isAuthenticated])
 
   const loading = !todos
 

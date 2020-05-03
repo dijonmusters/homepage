@@ -8,6 +8,7 @@ import { FiCircle, FiCheckCircle } from 'react-icons/fi'
 import NewTodo from './NewTodo'
 import useGradient from '../hooks/useGradient'
 import { useMediaQuery } from 'react-responsive'
+import Centered from './styled/Centered'
 
 const Container = styled.div`
   flex: 1;
@@ -104,7 +105,9 @@ const TodosList = () => {
     </Todo>
   )
 
-  if (loading) return <p>Loading todos...</p>
+  console.log(getTodosFor(currentFilter))
+
+  if (loading) return <Centered>Loading todos...</Centered>
 
   const todos = getTodosFor(currentFilter)
 
